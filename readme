@@ -1,3 +1,11 @@
-See samples directory for usage examples.
+pyun-build
+----------
 
-Real readme to follow.
+  This work is licensed under the GNU GPLv3 or any later version.
+  The latest code from this project should be available at:
+  http://github.com/brobinson9999/pyun-build
+
+  pyun-build is a set of Python utilities for building Unrealscript mods for both UT2004 and UT3. There are tools to support having files in a directory structure (instead of all source files for a package being in one directory), tools to support code generation, and some support for unit testing.
+
+Usage
+  See samples directory for usage examples.
