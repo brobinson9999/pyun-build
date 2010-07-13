@@ -26,21 +26,23 @@ def buildUT2k4modSystemINI(baseINIPath, filePath, modName, dependencies, nondepe
     bruteIO.writeFile(filePath, modifiedFileData)
 
 def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nondependencies, exportcache=True, deleteAfterBuild=False,modTitle="DummyBuild",modLogo="DummyBuildLogo",modDesc="DummyBuildDesc",modCmdLine="DummyBuildCmdLine",modURL="DummyURL"):
+    systemDirectory = os.path.join(ut2004baseDir, "System")
+    modSystemDirectory = os.path.join(ut2004baseDir, modName, "System")
+
     # Clear old files and directories.
     print "Clearing old files and directories..."
     baseModPath = os.path.join(ut2004baseDir, modName)
-    bruteIO.removeFile(os.path.join(ut2004baseDir, "system", modName + ".u"))
+    bruteIO.removeFile(os.path.join(systemDirectory, modName + ".u"))
     bruteIO.removeDirectory(baseModPath)
 
     # Create needed directories and files.
     print "Creating environment for " + modName + "..."
     sourceCodeDestinationDirectory = os.path.join(baseModPath, modName, "classes")
     os.makedirs(sourceCodeDestinationDirectory)
-    systemDirectory = os.path.join(ut2004baseDir, modName, "system")
-    os.makedirs(systemDirectory)
+    os.makedirs(modSystemDirectory)
 
     buildUT2k4modINI(os.path.join(ut2004baseDir, modName, "UT2k4mod.ini"), modTitle, modLogo, modDesc, modCmdLine, modURL)
-    buildUT2k4modSystemINI(os.path.join(ut2004baseDir, "system", "UT2004.ini"), os.path.join(systemDirectory, modName + ".ini"), modName, dependencies, nondependencies)
+    buildUT2k4modSystemINI(os.path.join(systemDirectory, "UT2004.ini"), os.path.join(modSystemDirectory, modName + ".ini"), modName, dependencies, nondependencies)
 
     # Copy source code.
     for sourceDirectory in sourceDirectories:
@@ -51,8 +53,9 @@ def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nonde
     # We don't need to pipe stdin for any reason - it is a workaround. If it isn't specified as a pipe Python attempts to duplicate
     # the input handle and in some circumstances that can fail.
     print "Compiling " + modName + "..."
-    uccPath = os.path.join(ut2004baseDir, "system", "ucc.exe")
-    p = subprocess.Popen([uccPath, "make", "-mod=" + modName],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+    uccPath = os.path.join(systemDirectory, "UCC.exe")
+    p = subprocess.Popen([uccPath + " make -mod=" + modName],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+#    p = subprocess.Popen([uccPath, "make", "-mod=" + modName],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
     outputTuple = p.communicate()
     outputText = outputTuple[0] + outputTuple[1]
 
@@ -71,7 +74,7 @@ def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nonde
         return False
     
     print "Deploying " + modName + "..."
-    shutil.copyfile(os.path.join(baseModPath, "system", modName + ".u"), os.path.join(ut2004baseDir, "system", modName + ".u"))
+    shutil.copyfile(os.path.join(modSystemDirectory, modName + ".u"), os.path.join(systemDirectory, modName + ".u"))
 
     print "Running Tests..."
     executeUnrealscriptTestCommandlets(sourceCodeDestinationDirectory, modName, uccPath)
