@@ -77,7 +77,7 @@ def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nonde
     shutil.copyfile(os.path.join(modSystemDirectory, modName + ".u"), os.path.join(systemDirectory, modName + ".u"))
 
     print "Running Tests..."
-    executeUnrealscriptTestCommandlets(sourceCodeDestinationDirectory, modName, uccPath)
+    executeUnrealscriptTestCommandlets(sourceCodeDestinationDirectory, modName, systemDirectory, uccPath)
 
     if (exportcache):    
         print "Generating Cache..."

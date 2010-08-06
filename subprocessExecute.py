@@ -9,7 +9,9 @@ def executePythonFile(filePath, workingDirectory):
     subprocess.call(["python", filePath], cwd=workingDirectory, shell=True)
 
 def executeLispFile(filePath, workingDirectory, loadIndirectly=False):
+#    pathToLisp = os.path.join("C:\\", "cygwin", "bin", "clisp.exe")
+    pathToLisp = os.path.join("C:", "Program Files", "clisp-2.47", "clisp.exe")
     if (loadIndirectly):
-        subprocess.call([os.path.join("C:\\", "cygwin", "bin", "clisp.exe"), "-q", "-x", "(load \"" + filePath.replace("\\", "/") + "\")"], cwd=workingDirectory, shell=True)
+        subprocess.call([pathToLisp, "-q", "-x", "(load \"" + filePath.replace("\\", "/") + "\")"], cwd=workingDirectory, shell=False)
     else:
-        subprocess.call([os.path.join("C:\\", "cygwin", "bin", "clisp.exe"), filePath], cwd=workingDirectory, shell=True)
+        subprocess.call([pathToLisp, filePath], cwd=workingDirectory, shell=False)
