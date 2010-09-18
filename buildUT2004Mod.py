@@ -25,7 +25,7 @@ def buildUT2k4modSystemINI(baseINIPath, filePath, modName, dependencies, nondepe
     bruteIO.removeFile(filePath)
     bruteIO.writeFile(filePath, modifiedFileData)
 
-def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nondependencies, exportcache=True, deleteAfterBuild=False,modTitle="DummyBuild",modLogo="DummyBuildLogo",modDesc="DummyBuildDesc",modCmdLine="DummyBuildCmdLine",modURL="DummyURL"):
+def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nondependencies, exportcache=True, deleteAfterBuild=True,modTitle="DummyBuild",modLogo="DummyBuildLogo",modDesc="DummyBuildDesc",modCmdLine="DummyBuildCmdLine",modURL="DummyURL"):
     systemDirectory = os.path.join(ut2004baseDir, "System")
     modSystemDirectory = os.path.join(ut2004baseDir, modName, "System")
 
@@ -47,7 +47,7 @@ def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nonde
     # Copy source code.
     for sourceDirectory in sourceDirectories:
         print "Copying files from " + sourceDirectory + "..."
-        copyAll.copyAll(sourceDirectory, sourceCodeDestinationDirectory)
+        copyAll.copyAll(sourceDirectory, sourceCodeDestinationDirectory, makeLinksInsteadOfCopying=False)
 
     # Do the actual compile.
     # We don't need to pipe stdin for any reason - it is a workaround. If it isn't specified as a pipe Python attempts to duplicate
@@ -86,7 +86,7 @@ def buildUT2k4mod(ut2004baseDir, modName, sourceDirectories, dependencies, nonde
 
     print "Cleaning up..."
     if (deleteAfterBuild):
-        removeDirectory(baseModPath)
+        bruteIO.removeDirectory(baseModPath)
     
     print "Finished building " + modName + "."
 
